@@ -1,138 +1,111 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react';
+import { Field, Form, Formik } from "formik";
+import { useContext } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const CreateBlog = () => {
-  const [blogs, setBlogs] = useState([]);
-  const [loading, setLoading] = useState(true);
 
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [image, setImage] = useState('');
-  const [author, setAuthor] = useState('');
-
-  const [showForm, setShowForm] = useState(false);
-
-  const toggleForm = () => setShowForm(!showForm);
-
-  const fetchBlogs = async () => {
+  const handleSubmit = async (values, { setSubmitting, resetForm }) => {
     try {
-      const response = await axios.get("https://blog-hqx2.onrender.com/blog");
-      setBlogs(response.data);
-      setLoading(false);
-    } catch (error) {
-      console.error("Error fetching blogs:", error);
-      setLoading(false);
-    }
-  };
+      const formData = new FormData();
+      formData.append("title", values.title);
+      formData.append("content", values.content);
+      if (values.image) {
+        formData.append("image", values.image);
+      }
+      formData.append("author", user?._id);
 
-  const handleCreateBlog = async (e) => {
-    e.preventDefault();
-    try {
-      const newBlog = {
-        title,
-        content,
-        image,
-        author: { name: author }
-      };
+      await axios.post("https://blog-hqx2.onrender.com/blog/create", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
 
-      await axios.post("https://blog-hqx2.onrender.com/blog", newBlog);
-      setTitle('');
-      setContent('');
-      setImage('');
-      setAuthor('');
-      setShowForm(false);
-      fetchBlogs();
+      resetForm();
+      navigate("/");
     } catch (error) {
       console.error("Error creating blog:", error);
+    } finally {
+      setSubmitting(false);
     }
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 p-6">
-      <div className="max-w-5xl mx-auto">
-        {/* Page Header */}
-        <div className="flex items-center justify-between mb-6">
-          <h1 className="text-3xl font-bold text-gray-800">Blog Posts</h1>
-          <button
-            onClick={toggleForm}
-            className="bg-blue-600 hover:bg-blue-700 text-white font-semibold px-4 py-2 rounded shadow"
-          >
-            {showForm ? 'Cancel' : 'Create Blog'}
-          </button>
-        </div>
+    <div className="max-w-3xl mx-auto mt-12 p-8 bg-gradient-to-r from-blue-400 to-indigo-600 rounded-3xl shadow-lg">
+      <h2 className="text-3xl font-bold mb-8 text-white text-center">
+        Create a New Blog
+      </h2>
+      <Formik
+        initialValues={{ title: "", content: "", image: null }}
+        onSubmit={handleSubmit}
+      >
+        {({ setFieldValue, values, isSubmitting }) => (
+          <Form className="flex flex-col gap-6">
+            <label
+              htmlFor="title"
+              className="text-white font-semibold text-lg"
+            >
+              Title
+            </label>
+            <Field
+              id="title"
+              name="title"
+              type="text"
+              placeholder="Enter blog title"
+              className="p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              required
+            />
 
-        {/* Form */}
-        {showForm && (
-          <form onSubmit={handleCreateBlog} className="bg-white p-6 rounded-lg shadow-md mb-8">
-            <h2 className="text-xl font-semibold mb-4 text-gray-700">New Blog</h2>
+            <label
+              htmlFor="content"
+              className="text-white font-semibold text-lg"
+            >
+              Content
+            </label>
+            <Field
+              id="content"
+              name="content"
+              as="textarea"
+              placeholder="Enter blog content"
+              rows="6"
+              className="p-3 rounded-md border border-gray-300 focus:outline-none focus:ring-2 focus:ring-indigo-400 resize-none"
+              required
+            />
 
-            <input
-              type="text"
-              placeholder="Title"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              className="w-full mb-3 p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-              required
-            />
-            <input
-              type="text"
-              placeholder="Image URL"
-              value={image}
-              onChange={(e) => setImage(e.target.value)}
-              className="w-full mb-3 p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-              required
-            />
-            <textarea
-              placeholder="Content"
-              value={content}
-              onChange={(e) => setContent(e.target.value)}
-              className="w-full mb-3 p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-              rows={4}
-              required
-            ></textarea>
-            <input
-              type="text"
-              placeholder="Author Name"
-              value={author}
-              onChange={(e) => setAuthor(e.target.value)}
-              className="w-full mb-4 p-3 border border-gray-300 rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-              required
-            />
+            <div>
+              <label
+                htmlFor="image"
+                className="text-white font-semibold text-lg"
+              >
+                Upload Blog Image
+              </label>
+              <input
+                id="image"
+                name="image"
+                type="file"
+                accept="image/*"
+                onChange={(event) => {
+                  setFieldValue("image", event.currentTarget.files[0]);
+                }}
+                className="mt-2 block w-full text-sm text-gray-900 bg-white rounded-md border border-gray-300 cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-400"
+              />
+              {values.image && (
+                <p className="mt-2 text-sm text-white">
+                  Selected file: {values.image.name}
+                </p>
+              )}
+            </div>
 
             <button
               type="submit"
-              className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded font-medium"
+              disabled={isSubmitting}
+              className={`mt-6 bg-indigo-700 hover:bg-indigo-800 text-white font-bold py-3 rounded-lg transition-colors duration-300 ${
+                isSubmitting ? "opacity-50 cursor-not-allowed" : "cursor-pointer"
+              }`}
             >
-              Submit Blog
+              {isSubmitting ? "Submitting..." : "Submit Blog"}
             </button>
-          </form>
+          </Form>
         )}
-
-        {/* Blog List */}
-        {loading ? (
-          <div className="text-center text-xl text-gray-500">Loading blogs...</div>
-        ) : (
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-            {blogs.map((blog) => (
-              <div key={blog._id} className="bg-white rounded-lg shadow hover:shadow-lg transition duration-300 overflow-hidden">
-                <img
-                  src={blog.image}
-                  alt={blog.title}
-                  className="w-full h-48 object-cover"
-                />
-                <div className="p-4">
-                  <h2 className="text-2xl font-semibold text-gray-800">{blog.title}</h2>
-                  <p className="text-gray-600 mt-2 line-clamp-3">{blog.content}</p>
-                  <div className="mt-4 text-sm text-gray-500">
-                    <p>Author: {blog.author?.name}</p>
-                    <p>{new Date(blog.createdAt).toLocaleDateString()}</p>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        )}
-      </div>
+      </Formik>
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { AuthContext } from './AuthContext.jsx'
+
 
 const AuthProvider = ({children}) => {
     const [token, setToken] = useState(null)
@@ -11,6 +11,11 @@ const AuthProvider = ({children}) => {
     const login = (loginToken, userDetails) => {
         setToken(loginToken)
         setUser(userDetails)
+    }
+
+    const logout= () =>{
+      setToken(null);
+      setUser(null);
     }
 
   return (
