@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import Navbar from '../components/Navbar'
+import Navbar from './Navbar'
 import Home from './Home'
 import Projects from './Projects'
 import Skills from './Skills'
