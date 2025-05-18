@@ -8,7 +8,7 @@ const links = [
   { name: 'Contact', href: '#contact' },
 ]
 
-export default function Navbar({ active }) {
+export default function NavaBar({ active }) {
   const [menuOpen, setMenuOpen] = useState(false)
 
   const toggleMenu = () => setMenuOpen(!menuOpen)
