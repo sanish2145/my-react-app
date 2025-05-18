@@ -1,15 +1,14 @@
 import React, { useState, useEffect } from 'react'
-import Navbar from './components/Navbar'
-import Home from './sections/Home'
-import Projects from './sections/Projects'
-import Skills from './sections/Skills'
-import Blog from './sections/Blog'
-import Contact from './sections/Contact'
+import Navbar from '../components/Navbar'
+import Home from './Home'
+import Projects from './Projects'
+import Skills from './Skills'
+import Blog from './Blog'
+import Contact from './Contact'
 
 export default function App() {
   const [activeSection, setActiveSection] = useState('home')
 
-  // Scroll spy to highlight active nav link
   useEffect(() => {
     const sections = ['home', 'projects', 'skills', 'blog', 'contact']
     const handleScroll = () => {
