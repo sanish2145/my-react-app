@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import Navbar from './Navbar'
-import Home from './Home'
-import Projects from './Projects'
-import Skills from './Skills'
-import Blog from './Blog'
-import Contact from './Contact'
+import Navbar from '../Pages/Navbar'
+import Home from '../Pages/Home'
+import Projects from '../Pages/Projects'
+import Skills from '../Pages/Skills'
+import Blog from '../Pages/Blog'
+import Contact from ./Pages/Contact'
 
 export default function App() {
   const [activeSection, setActiveSection] = useState('home')
