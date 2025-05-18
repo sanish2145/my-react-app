@@ -4,7 +4,8 @@ import Home from '../Pages/Home'
 import Projects from '../Pages/Projects'
 import Skills from '../Pages/Skills'
 import Blog from '../Pages/Blog'
-import Contact from ./Pages/Contact'
+import Contact from './Pages/Contact'
+
 
 export default function App() {
   const [activeSection, setActiveSection] = useState('home')
