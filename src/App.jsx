@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react'
-import Navbar from '../Pages/Navbar'
-import Home from '../Pages/Home'
-import Projects from '../Pages/Projects'
-import Skills from '../Pages/Skills'
-import Blog from '../Pages/Blog'
-import Contact from './Pages/Contact'
+import Navbar from '../Pages/Navbar.jsx'
+import Home from '../Pages/Home.jsx'
+import Projects from '../Pages/Projects.jsx'
+import Skills from '../Pages/Skills.jsx'
+import Blog from '../Pages/Blog.jsx'
+import Contact from './Pages/Contact.jsx'
 
 
 export default function App() {
