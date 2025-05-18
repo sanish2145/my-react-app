@@ -17,15 +17,15 @@ function App() {
         <Routes>
         
           <Route path="/" element={<Home />} />
-          <Route path="/signup" element={<Register />} />
-          <Route path="/login" element={<Login />} />
+          <Route path="/" element={<Register />} />
+          <Route path="/" element={<Login />} />
 
           
-          <Route path="/createblog" element={<CreateBlog />} />
-          <Route path="/bloglist" element={<BlogList />} />
-          <Route path="/blogdetail" element={<BlogDetail />} />
-          <Route path="/singleblog/:id" element={<BlogDetail />} />
-           <Route path="/Hero" element={<HeroSection/>} />
+          <Route path="/" element={<CreateBlog />} />
+          <Route path="/" element={<BlogList />} />
+          <Route path="/" element={<BlogDetail />} />
+          <Route path="/" element={<BlogDetail />} />
+           <Route path="/" element={<HeroSection/>} />
         </Routes>
       </main>
     </Router>
