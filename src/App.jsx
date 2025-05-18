@@ -1,35 +1,51 @@
-import './App.css';
-import CreateBlog from './Pages/CreateBlog';
-import BlogList from './Pages/BlogList';
-import BlogDetail from './Pages/BlogDetail';
-import Home from './Pages/Home';
-import Login from './Pages/Login';
-import NavBar from './Pages/NavBar';
-import Register from './Pages/Register';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import HeroSection from './Pages/HeroSection';
+import React, { useState, useEffect } from 'react'
+import Navbar from './components/Navbar'
+import Home from './sections/Home'
+import Projects from './sections/Projects'
+import Skills from './sections/Skills'
+import Blog from './sections/Blog'
+import Contact from './sections/Contact'
 
-function App() {
+export default function App() {
+  const [activeSection, setActiveSection] = useState('home')
+
+  // Scroll spy to highlight active nav link
+  useEffect(() => {
+    const sections = ['home', 'projects', 'skills', 'blog', 'contact']
+    const handleScroll = () => {
+      const scrollPos = window.scrollY + window.innerHeight / 3
+      for (let i = sections.length - 1; i >= 0; i--) {
+        const el = document.getElementById(sections[i])
+        if (el && el.offsetTop <= scrollPos) {
+          setActiveSection(sections[i])
+          break
+        }
+      }
+    }
+    window.addEventListener('scroll', handleScroll)
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
   return (
-    <Router>
-      <NavBar /> {/* NavBar is visible on all pages */}
-      <main className="bg-red-400 text-2xl">
-        <Routes>
-        
-          <Route path="/" element={<Home />} />
-          <Route path="/" element={<Register />} />
-          <Route path="/" element={<Login />} />
-
-          
-          <Route path="/" element={<CreateBlog />} />
-          <Route path="/" element={<BlogList />} />
-          <Route path="/" element={<BlogDetail />} />
-          <Route path="/" element={<BlogDetail />} />
-           <Route path="/" element={<HeroSection/>} />
-        </Routes>
+    <div className="font-sans text-gray-900 bg-white min-h-screen">
+      <Navbar active={activeSection} />
+      <main className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8">
+        <section id="home" className="min-h-screen flex items-center">
+          <Home />
+        </section>
+        <section id="projects" className="py-20">
+          <Projects />
+        </section>
+        <section id="skills" className="py-20 bg-gray-50">
+          <Skills />
+        </section>
+        <section id="blog" className="py-20">
+          <Blog />
+        </section>
+        <section id="contact" className="py-20 bg-gray-50">
+          <Contact />
+        </section>
       </main>
-    </Router>
-  );
+    </div>
+  )
 }
-
-export default App;
